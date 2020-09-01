@@ -59,6 +59,7 @@ public class ConfFileBasedFdnRouter implements FdnRouter {
     private static final String IP = "ip";
     private static final String PORT = "port";
     private static final String HOSTNAME = "hostname";
+    private static final String SECURE = "is_secure";
     private static final String DEFAULT = "default";
     private static final Logger LOGGER = LogManager.getLogger(ConfFileBasedFdnRouter.class);
     private final BasicMeta.Endpoint emptyEndpoint;
@@ -452,10 +453,10 @@ public class ConfFileBasedFdnRouter implements FdnRouter {
             result = endpoints.get(pos);
         }
 
-        topicEndpointMapping.put(topic, result);
+/*        topicEndpointMapping.put(topic, result);
         if (noCallbackTopic != null && !topicEndpointMapping.containsKey(noCallbackTopic)) {
             topicEndpointMapping.put(noCallbackTopic, result);
-        }
+        }*/
 
         return result;
     }
@@ -486,7 +487,8 @@ public class ConfFileBasedFdnRouter implements FdnRouter {
                 newRouteTable.put(coordinatorKey, roleTable);
             }
 
-            if (coordinatorKey.equals(proxyServerConf.getCoordinator())) {
+            if (coordinatorKey.equals(proxyServerConf.getCoordinator())
+                    || coordinatorKey.equals(proxyServerConf.getPartyId())) {
                 isIntranet = true;
             }
 
@@ -523,6 +525,13 @@ public class ConfFileBasedFdnRouter implements FdnRouter {
                         newRouteNeighbours.add(targetHostname);
                     }
 
+                    if (endpointJson.has(SECURE)) {
+                        String isSecure = endpointJson.get(SECURE).getAsString();
+                        if("false".equals(isSecure.toLowerCase()) || ("0".equals(isSecure))) {
+                            isIntranet = true;
+                        }
+                    }
+
                     BasicMeta.Endpoint endpoint = endpointBuilder.build();
 
                     endpoints.add(endpoint);
@@ -531,6 +540,8 @@ public class ConfFileBasedFdnRouter implements FdnRouter {
                     }
                 }
             }
+            
+            isIntranet = false;
         }
 
         routeTable = newRouteTable;
