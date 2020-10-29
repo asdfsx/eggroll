@@ -30,8 +30,8 @@ def create_pair_adapter(options: dict):
         from eggroll.core.pair_store.lmdb import LmdbAdapter
         ret = LmdbAdapter(options=options)
     elif options["store_type"] == StoreTypes.ROLLPAIR_DOUBLE_WRITE:
-        from eggroll.core.pair_store.replica_adapter import ReplicaWriteAdapter
-        ret = ReplicaWriteAdapter(options=options)
+        from eggroll.core.pair_store.replication_adapter import ReplicationWriteAdapter
+        ret = ReplicationWriteAdapter(options=options)
     elif options["store_type"] == StoreTypes.ROLLPAIR_LEVELDB:
         from eggroll.core.pair_store.rocksdb import RocksdbAdapter
         ret = RocksdbAdapter(options=options)

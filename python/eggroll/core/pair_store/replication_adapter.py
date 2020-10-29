@@ -28,7 +28,7 @@ LMDB_MAP_SIZE_WINDOWS_OS = 40 * 1024 * 1024
 DEFAULT_DB = b'main'
 
 
-class ReplicaWriteAdapter(PairAdapter):
+class ReplicationWriteAdapter(PairAdapter):
 
     def __init__(self, options):
         self.firstAdapter = LmdbAdapter(options)
@@ -103,7 +103,7 @@ class ReplicaWriteAdapter(PairAdapter):
         return True
 
 
-class ReplicaWriteIterator(PairIterator):
+class ReplicationWriteIterator(PairIterator):
     def __init__(self, adapter: LmdbAdapter):
         self.firstIterator = LmdbIterator(adapter)
         self.cursor = self.firstIterator.cursor
@@ -132,7 +132,7 @@ class ReplicaWriteIterator(PairIterator):
         return self.cursor.__iter__()
 
 
-class ReplicaWriteBatch(PairWriteBatch):
+class ReplicationWriteBatch(PairWriteBatch):
     def __init__(self, adapter: LmdbAdapter, txn):
         self.firstWriteBatch = LmdbWriteBatch(adapter, txn)
 
