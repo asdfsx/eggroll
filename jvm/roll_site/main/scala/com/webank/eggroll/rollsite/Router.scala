@@ -20,13 +20,11 @@ object Router extends Logging{
 
 
   def initOrUpdateRouterTable(path: String): Unit = {
-
     val yaml = new Yaml
     val stream = new FileInputStream(path)
     routerTable = yaml.load(stream)
     routerTable = routerTable.get("route_table")
     logDebug("routeTable:" + routerTable)
-    println("routeTable:" + routerTable)
   }
 
   def query(partyId: String, role: String = "default"): QueryResult = {
